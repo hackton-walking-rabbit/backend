@@ -19,6 +19,14 @@ public class UserService {
         return userRepository.findByKakaoId(kakaoId);
     }
 
+    public Boolean existsByUsername(String username) {
+        Boolean impossible = userRepository.existsByUsername(username);
+        if (impossible) {
+            throw new IllegalStateException("이미 존재하는 아이디입니다.");
+        }
+        return impossible;
+    }
+
     public String signUp(SignUpRequestDto requestDto) {
 
         UserEntity user = UserEntity.builder()

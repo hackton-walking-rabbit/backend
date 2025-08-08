@@ -21,11 +21,18 @@ public class UserController {
 
     public final UserService userService;
 
+    @GetMapping("/exist")
+    public ResponseEntity<SuccessResponse<Void>> existsByUsername(@RequestParam("username") String username) {
+        userService.existsByUsername(username);
+        return SuccessResponse.ok("아이디 사용이 가능합니다.", true);
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<TokenResponseDto>> signUp(@RequestBody SignUpRequestDto requestDto) {
 
         String jwt = userService.signUp(requestDto);
 
-        return SuccessResponse.onSuccess("token", HttpStatus.CREATED, new TokenResponseDto(jwt));
+        return SuccessResponse.onSuccess("jwt token이 생성되었습니다.", HttpStatus.CREATED, new TokenResponseDto(jwt));
     }
+
 }

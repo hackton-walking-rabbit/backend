@@ -1,5 +1,6 @@
 package ddg.walking_rabbit.user.service;
 
+import ddg.walking_rabbit.global.security.JwtProvider;
 import ddg.walking_rabbit.user.dto.KakaoResponseDto;
 import ddg.walking_rabbit.user.entity.UserEntity;
 import ddg.walking_rabbit.user.repository.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final JwtProvider jwtProvider;
 
     @Value("${kakao.auth.client}")
     private String clientId;
@@ -72,7 +74,7 @@ public class AuthService {
 
     public String login(UserEntity user){
 
-
-        return "abc";
+        String username = user.getUsername();
+        return jwtProvider.createToken(username);
     }
 }

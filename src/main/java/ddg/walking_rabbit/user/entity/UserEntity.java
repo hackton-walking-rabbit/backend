@@ -15,10 +15,12 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    private Long kakaoId;
-    private String nickname;
-    private String profileImageUrl;
+    private Long kakaoId; // 고유키
 
-    private String username;
+    private String nickname; // kakao nickname -> 수정 가능
+
+    private String profileImageUrl; // kakao 프사
+
+    private String username; // 자체 아이디
 
 }
