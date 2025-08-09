@@ -5,6 +5,7 @@ import ddg.walking_rabbit.user.entity.UserEntity;
 import ddg.walking_rabbit.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,14 +20,11 @@ public class UserService {
         return userRepository.findByKakaoId(kakaoId);
     }
 
-    public Boolean existsByUsername(String username) {
-        Boolean impossible = userRepository.existsByUsername(username);
-        if (impossible) {
-            throw new IllegalStateException("이미 존재하는 아이디입니다.");
-        }
-        return impossible;
+    public boolean isUsernameAvailable(String username) {
+        return !userRepository.existsByUsername(username);
     }
 
+    @Transactional
     public String signUp(SignUpRequestDto requestDto) {
 
         UserEntity user = UserEntity.builder()

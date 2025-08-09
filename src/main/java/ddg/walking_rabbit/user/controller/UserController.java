@@ -22,10 +22,12 @@ public class UserController {
     public final UserService userService;
 
     @GetMapping("/exist")
-    public ResponseEntity<SuccessResponse<Void>> existsByUsername(@RequestParam("username") String username) {
-        userService.existsByUsername(username);
-        return SuccessResponse.ok("아이디 사용이 가능합니다.");
+    public ResponseEntity<SuccessResponse<Boolean>> existsByUsername(@RequestParam("username") String username) {
+        boolean available = userService.isUsernameAvailable(username);
+        String message = available ? "아이디 사용이 가능합니다." : "이미 존재하는 아이디입니다.";
+        return SuccessResponse.onSuccess(message, HttpStatus.OK, available);
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<TokenResponseDto>> signUp(@RequestBody SignUpRequestDto requestDto) {
