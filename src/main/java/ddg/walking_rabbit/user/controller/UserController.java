@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping("/exist")
     public ResponseEntity<SuccessResponse<Void>> existsByUsername(@RequestParam("username") String username) {
         userService.existsByUsername(username);
-        return SuccessResponse.ok("아이디 사용이 가능합니다.", true);
+        return SuccessResponse.ok("아이디 사용이 가능합니다.");
     }
 
     @PostMapping("/signup")

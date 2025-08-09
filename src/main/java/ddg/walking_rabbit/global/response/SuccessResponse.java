@@ -19,7 +19,7 @@ public class SuccessResponse<T> {
     }
 
     // 데이터 없는 성공응답
-    public static ResponseEntity<SuccessResponse<Void>> ok(String message, Boolean aBoolean){
+    public static ResponseEntity<SuccessResponse<Void>> ok(String message){
         return new ResponseEntity<>(new SuccessResponse<>(HttpStatus.OK.value(), message, null), HttpStatus.OK);
     }
 }
