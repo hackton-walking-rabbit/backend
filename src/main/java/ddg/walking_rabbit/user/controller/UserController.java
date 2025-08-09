@@ -29,9 +29,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<TokenResponseDto>> signUp(@RequestBody SignUpRequestDto requestDto) {
-
         String jwt = userService.signUp(requestDto);
-
         return SuccessResponse.onSuccess("jwt token이 생성되었습니다.", HttpStatus.CREATED, new TokenResponseDto(jwt));
     }
 
