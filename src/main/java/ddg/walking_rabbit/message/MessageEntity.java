@@ -1,0 +1,31 @@
+package ddg.walking_rabbit.message;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+public class MessageEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long messageId;
+
+    @ManyToOne
+    @JoinColumn(name = "conversationId", nullable = false)
+    private ConversationEntity conversation;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private ContentType contentType;
+
+    private String content;
+
+}
