@@ -19,18 +19,15 @@ public class ChatRecordEntity {
     private Long chatRecordId;
 
     @OneToOne
-    @JoinColumn(name = "conversationId", nullable = false)
+    @JoinColumn(nullable = false)
     private ConversationEntity conversation;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(nullable = false)
     private UserEntity user;
 
     private String title;
-
     private String coverPhoto;
-
     private Integer explorerOrder;
-
     private LocalDateTime createdAt;
 }

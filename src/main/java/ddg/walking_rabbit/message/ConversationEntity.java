@@ -15,11 +15,10 @@ public class ConversationEntity {
     private Long conversationId;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(nullable = false)
     private UserEntity user;
 
     @OneToOne
-    @JoinColumn(name = "missionId", nullable = true)
     private MissionEntity mission;
 
     @Column(nullable = false)

@@ -19,7 +19,7 @@ public class MissionEntity {
     private Long missionId;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(nullable = false)
     private UserEntity user;
 
     private String content;

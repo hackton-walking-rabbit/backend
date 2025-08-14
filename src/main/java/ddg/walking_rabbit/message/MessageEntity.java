@@ -17,7 +17,7 @@ public class MessageEntity {
     private Long messageId;
 
     @ManyToOne
-    @JoinColumn(name = "conversationId", nullable = false)
+    @JoinColumn(nullable = false)
     private ConversationEntity conversation;
 
     @Enumerated(EnumType.STRING)
