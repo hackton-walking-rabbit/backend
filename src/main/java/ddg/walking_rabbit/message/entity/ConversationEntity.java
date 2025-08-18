@@ -29,27 +29,4 @@ public class ConversationEntity {
     @Column(nullable = false)
     private Double longitude;
 
-    @Entity
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class ChatRecordEntity {
-
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long chatRecordId;
-
-        @OneToOne
-        @JoinColumn(nullable = false)
-        private ConversationEntity conversation;
-
-        @ManyToOne
-        @JoinColumn(nullable = false)
-        private UserEntity user;
-
-        private String title;
-        private String coverPhoto;
-        private Integer explorerOrder;
-        private LocalDateTime createdAt;
-    }
 }

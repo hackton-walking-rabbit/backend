@@ -37,8 +37,8 @@ public class SecurityConfig {
                                 "/favicon.ico",
                                 "/error",
                                 "/api/auth/**",
-                                "/api/user/exist",
-                                "/api/user/signup"
+                                "/api/users/exist",
+                                "/api/users/signup"
                         ).permitAll()
                         .anyRequest().authenticated() // 또는 authenticated()
                 )
