@@ -28,9 +28,9 @@ public class JwtProvider {
         this.jwtKey = Keys.hmacShaKeyFor(jwtKeyString.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(String username) {
+    public String createToken(Long kakaoId) {
         String token = Jwts.builder()
-                .subject(username)
+                .subject(kakaoId.toString())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24))
                 .signWith(jwtKey)
@@ -47,7 +47,7 @@ public class JwtProvider {
         }
     }
 
-    public String extractUsername(String token) {
+    public String extractKakaoId(String token) {
         Jws<Claims> claims = Jwts.parser()
                 .verifyWith(jwtKey)
                 .build()

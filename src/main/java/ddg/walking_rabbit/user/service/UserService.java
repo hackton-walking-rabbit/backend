@@ -20,19 +20,16 @@ public class UserService {
         return userRepository.findByKakaoId(kakaoId);
     }
 
-    public boolean isUsernameAvailable(String username) {
-        return !userRepository.existsByUsername(username);
-    }
 
     @Transactional
-    public String signUp(SignUpRequestDto requestDto) {
+    public String signUp(Long kakaoId, String nickname, String profileImageUrl) {
 
         UserEntity user = UserEntity.builder()
-                .kakaoId(requestDto.getKakaoId())
-                .nickname(requestDto.getNickname())
-                .profileImageUrl(requestDto.getProfileImageUrl())
-                .username(requestDto.getUsername())
+                .kakaoId(kakaoId)
+                .nickname(nickname)
+                .profileImageUrl(profileImageUrl)
                 .build();
+
         userRepository.save(user);
 
         return authService.login(user);

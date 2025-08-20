@@ -3,6 +3,7 @@ package ddg.walking_rabbit.user.controller;
 import ddg.walking_rabbit.global.response.SuccessResponse;
 import ddg.walking_rabbit.user.dto.KakaoLoginFailResponseDto;
 import ddg.walking_rabbit.user.dto.KakaoResponseDto;
+import ddg.walking_rabbit.user.dto.SignUpRequestDto;
 import ddg.walking_rabbit.user.dto.TokenResponseDto;
 import ddg.walking_rabbit.user.entity.UserEntity;
 import ddg.walking_rabbit.user.service.AuthService;
@@ -42,7 +43,7 @@ public class AuthController {
     }
 
     @GetMapping("/kakao/callback")
-    public ResponseEntity<SuccessResponse<Object>> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) {
+    public ResponseEntity<SuccessResponse<TokenResponseDto>> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) {
 
         KakaoResponseDto.OAuthToken token = authService.getAccessToken(code);
         KakaoResponseDto.KakaoProfile profile = authService.getUserInfo(token.getAccessToken());
@@ -53,11 +54,9 @@ public class AuthController {
         Optional<UserEntity> optionalUser = userService.findUserByKakaoId(kakaoId);
 
         if (optionalUser.isEmpty()) {
-            KakaoLoginFailResponseDto loginFailResponseDto = new KakaoLoginFailResponseDto();
-            loginFailResponseDto.setKakaoId(kakaoId);
-            loginFailResponseDto.setNickname(nickname);
-            loginFailResponseDto.setProfileImageUrl(profileImageUrl);
-            return SuccessResponse.onSuccess("회원가입 필요", HttpStatus.OK, loginFailResponseDto);
+            String jwt = userService.signUp(kakaoId, nickname, profileImageUrl);
+            TokenResponseDto tokenResponseDto = new TokenResponseDto(jwt);
+            return SuccessResponse.onSuccess("회원가입 성공", HttpStatus.CREATED, tokenResponseDto);
         }
 
         UserEntity user = optionalUser.get();

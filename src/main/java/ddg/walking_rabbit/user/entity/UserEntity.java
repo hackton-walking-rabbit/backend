@@ -16,8 +16,10 @@ public class UserEntity {
     private Long userId;
 
     private Long kakaoId; // 고유키
+
     private String nickname; // kakao nickname -> 수정 가능
+
     private String profileImageUrl; // kakao 프사
-    private String username; // 자체 아이디
+
 
 }
