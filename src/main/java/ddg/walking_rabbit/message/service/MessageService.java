@@ -89,8 +89,6 @@ public class MessageService {
             throw new IllegalArgumentException("GCS 업로드 중 오류가 발생했습니다.");
         }
 
-        log.info("incoming file: name={}, size={}", file.getOriginalFilename(), file.getSize());
-
         String publicUrl = String.format("https://storage.googleapis.com/%s/%s",
                 bucketName, URLEncoder.encode(newFilename, StandardCharsets.UTF_8));
 
