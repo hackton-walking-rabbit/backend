@@ -74,7 +74,7 @@ public class AuthService {
 
     public String login(UserEntity user){
 
-        String username = user.getUsername();
-        return jwtProvider.createToken(username);
+        String kakaoId = user.getKakaoId().toString();
+        return jwtProvider.createToken(user.getKakaoId());
     }
 }

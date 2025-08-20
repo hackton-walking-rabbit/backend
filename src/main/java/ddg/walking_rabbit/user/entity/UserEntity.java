@@ -21,6 +21,5 @@ public class UserEntity {
 
     private String profileImageUrl; // kakao 프사
 
-    private String username; // 자체 아이디
 
 }

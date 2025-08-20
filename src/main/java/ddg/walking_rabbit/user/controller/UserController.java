@@ -21,18 +21,5 @@ public class UserController {
 
     public final UserService userService;
 
-    @GetMapping("/exist")
-    public ResponseEntity<SuccessResponse<Boolean>> existsByUsername(@RequestParam("username") String username) {
-        boolean available = userService.isUsernameAvailable(username);
-        String message = available ? "아이디 사용이 가능합니다." : "이미 존재하는 아이디입니다.";
-        return SuccessResponse.onSuccess(message, HttpStatus.OK, available);
-    }
-
-
-    @PostMapping("/signup")
-    public ResponseEntity<SuccessResponse<TokenResponseDto>> signUp(@RequestBody SignUpRequestDto requestDto) {
-        String jwt = userService.signUp(requestDto);
-        return SuccessResponse.onSuccess("jwt token이 생성되었습니다.", HttpStatus.CREATED, new TokenResponseDto(jwt));
-    }
 
 }

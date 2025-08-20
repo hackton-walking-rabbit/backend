@@ -42,9 +42,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            String username = jwtProvider.extractUsername(token);
+            String kakaoId = jwtProvider.extractKakaoId(token);
 
-            UserEntity user = userRepository.findByUsername(username)
+            UserEntity user = userRepository.findByKakaoId(Long.parseLong(kakaoId))
                     .orElseThrow(() -> new IllegalArgumentException("잘못된 토큰입니다."));
 
             UsernamePasswordAuthenticationToken authentication =
