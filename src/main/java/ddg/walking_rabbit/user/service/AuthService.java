@@ -2,9 +2,8 @@ package ddg.walking_rabbit.user.service;
 
 import ddg.walking_rabbit.global.security.JwtProvider;
 import ddg.walking_rabbit.user.dto.KakaoResponseDto;
-import ddg.walking_rabbit.user.entity.UserEntity;
-import ddg.walking_rabbit.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import ddg.walking_rabbit.global.domain.entity.UserEntity;
+import ddg.walking_rabbit.global.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;

@@ -1,6 +1,6 @@
-package ddg.walking_rabbit.user.repository;
+package ddg.walking_rabbit.global.domain.repository;
 
-import ddg.walking_rabbit.user.entity.UserEntity;
+import ddg.walking_rabbit.global.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

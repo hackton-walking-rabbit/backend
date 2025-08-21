@@ -1,4 +1,4 @@
-package ddg.walking_rabbit.global.config;
+package ddg.walking_rabbit.global.domain.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

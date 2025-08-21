@@ -1,11 +1,9 @@
 package ddg.walking_rabbit.user.controller;
 
 import ddg.walking_rabbit.global.response.SuccessResponse;
-import ddg.walking_rabbit.user.dto.KakaoLoginFailResponseDto;
 import ddg.walking_rabbit.user.dto.KakaoResponseDto;
-import ddg.walking_rabbit.user.dto.SignUpRequestDto;
 import ddg.walking_rabbit.user.dto.TokenResponseDto;
-import ddg.walking_rabbit.user.entity.UserEntity;
+import ddg.walking_rabbit.global.domain.entity.UserEntity;
 import ddg.walking_rabbit.user.service.AuthService;
 import ddg.walking_rabbit.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;

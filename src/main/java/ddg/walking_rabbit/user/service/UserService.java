@@ -1,8 +1,7 @@
 package ddg.walking_rabbit.user.service;
 
-import ddg.walking_rabbit.user.dto.SignUpRequestDto;
-import ddg.walking_rabbit.user.entity.UserEntity;
-import ddg.walking_rabbit.user.repository.UserRepository;
+import ddg.walking_rabbit.global.domain.entity.UserEntity;
+import ddg.walking_rabbit.global.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
