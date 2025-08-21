@@ -49,6 +49,7 @@ public class MessageService {
 
         MessageEntity userMessage = uploadImage(file, conversation);
 
+        // 챗봇 연결
         RestTemplate restTemplate = new RestTemplate();
 
         String answer ="abc";
