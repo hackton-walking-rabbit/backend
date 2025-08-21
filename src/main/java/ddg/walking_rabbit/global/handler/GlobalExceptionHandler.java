@@ -1,19 +1,19 @@
 package ddg.walking_rabbit.global.handler;
 
 import ddg.walking_rabbit.global.response.ErrorResponse;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.ResponseEntity;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // (1) dto 유효성 검사 실패
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException e) {
-        return ErrorResponse.error(HttpStatus.BAD_REQUEST, "입력값이 유효하지 않습니다.");
+    // (1) 해당 리소스 존재하지 않음
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleExist(EntityNotFoundException e) {
+        return ErrorResponse.error(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     // (2) 간단한 파라미터 오류, 비즈니스 로직 오류 등
@@ -25,6 +25,7 @@ public class GlobalExceptionHandler {
     // (3) 기타 예외 처리 (fallback)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        e.printStackTrace();
         return ErrorResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류가 발생했습니다.");
     }
 }
