@@ -1,4 +1,4 @@
-package ddg.walking_rabbit.global.config;
+package ddg.walking_rabbit.global.domain.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

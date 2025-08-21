@@ -1,30 +1,29 @@
-package ddg.walking_rabbit.message.entity;
+package ddg.walking_rabbit.global.domain.entity;
 
+import ddg.walking_rabbit.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class MessageEntity {
+public class MissionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long messageId;
+    private Long missionId;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private ConversationEntity conversation;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @Enumerated(EnumType.STRING)
-    private ContentType contentType;
+    private UserEntity user;
 
     private String content;
+
+    private LocalDate missionDate;
 
 }

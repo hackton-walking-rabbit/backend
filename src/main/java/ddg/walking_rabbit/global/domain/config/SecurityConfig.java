@@ -1,4 +1,4 @@
-package ddg.walking_rabbit.global.config;
+package ddg.walking_rabbit.global.domain.config;
 
 import ddg.walking_rabbit.global.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;

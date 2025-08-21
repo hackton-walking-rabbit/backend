@@ -1,6 +1,6 @@
-package ddg.walking_rabbit.message.repository;
+package ddg.walking_rabbit.global.domain.repository;
 
-import ddg.walking_rabbit.message.entity.MessageEntity;
+import ddg.walking_rabbit.global.domain.entity.MessageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

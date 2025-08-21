@@ -1,10 +1,9 @@
 package ddg.walking_rabbit.message.dto;
 
-import ddg.walking_rabbit.message.entity.ContentType;
-import ddg.walking_rabbit.message.entity.Role;
+import ddg.walking_rabbit.global.domain.entity.ContentType;
+import ddg.walking_rabbit.global.domain.entity.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Setter
