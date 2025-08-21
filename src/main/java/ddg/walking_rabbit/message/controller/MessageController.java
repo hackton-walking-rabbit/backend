@@ -5,7 +5,7 @@ import ddg.walking_rabbit.message.dto.ChatRequestDto;
 import ddg.walking_rabbit.message.dto.ChatResponseDto;
 import ddg.walking_rabbit.message.dto.ChatStartDto;
 import ddg.walking_rabbit.message.service.MessageService;
-import ddg.walking_rabbit.user.entity.UserEntity;
+import ddg.walking_rabbit.global.domain.entity.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Encoding;
@@ -39,8 +39,7 @@ public class MessageController {
     @PostMapping("/text")
     public ResponseEntity<SuccessResponse<ChatResponseDto>> doChat(ChatRequestDto requestDto) {
         UserEntity user = ((UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        Long userId = user.getUserId();
-        ChatResponseDto responseDto = messageService.doChat(userId, requestDto.getConversationId(), requestDto.getContent());
+        ChatResponseDto responseDto = messageService.doChat(user, requestDto.getConversationId(), requestDto.getContent());
         return SuccessResponse.onSuccess("챗봇 응답이 생성되었습니다.", HttpStatus.CREATED, responseDto);
     }
 }

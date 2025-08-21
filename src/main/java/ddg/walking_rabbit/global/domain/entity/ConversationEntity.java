@@ -1,6 +1,5 @@
 package ddg.walking_rabbit.global.domain.entity;
 
-import ddg.walking_rabbit.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

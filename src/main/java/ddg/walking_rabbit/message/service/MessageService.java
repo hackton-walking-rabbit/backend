@@ -7,7 +7,7 @@ import ddg.walking_rabbit.message.dto.ChatStartDto;
 import ddg.walking_rabbit.global.domain.repository.ConversationRepository;
 import ddg.walking_rabbit.global.domain.repository.MessageRepository;
 import ddg.walking_rabbit.global.domain.repository.MissionRepository;
-import ddg.walking_rabbit.user.entity.UserEntity;
+import ddg.walking_rabbit.global.domain.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -48,7 +50,11 @@ public class MessageService {
         MessageEntity userMessage = uploadImage(file, conversation);
 
         // 챗봇 연결
+        String photo = userMessage.getContent();
+
         RestTemplate restTemplate = new RestTemplate();
+
+
 
         String answer ="abc";
 
@@ -68,6 +74,7 @@ public class MessageService {
         return result;
     }
 
+    @Transactional
     public MessageEntity uploadImage(MultipartFile file, ConversationEntity conversation) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("빈 파일입니다.");
@@ -100,7 +107,39 @@ public class MessageService {
         return message;
     }
 
-    public ChatResponseDto doChat(Long userId, Long conversationId, String content) {
-        return null;
+    @Transactional
+    public ChatResponseDto doChat(UserEntity user, Long conversationId, String content) {
+        ConversationEntity conversation = conversationRepository.findByConversationId(conversationId);
+
+        // 유저 대화 저장
+        MessageEntity userMessage = new MessageEntity();
+        userMessage.setRole(Role.USER);
+        userMessage.setContentType(ContentType.TEXT);
+        userMessage.setContent(content);
+        userMessage.setConversation(conversation);
+        messageRepository.save(userMessage);
+
+        // 챗봇 통신
+        List<String> messages = messageRepository.findAllContentByConversationOrderByMessageIdAsc(conversation);
+
+
+
+        // 받기
+        String answer="abc";
+        MessageEntity aiMessage = new MessageEntity();
+        aiMessage.setRole(Role.ASSISTANT);
+        aiMessage.setContentType(ContentType.TEXT);
+        aiMessage.setContent(answer);
+        aiMessage.setConversation(conversation);
+        messageRepository.save(aiMessage);
+
+        ChatResponseDto result = ChatResponseDto.builder()
+                .role(Role.ASSISTANT)
+                .contentType(ContentType.TEXT)
+                .content(aiMessage.getContent())
+                .conversationId(conversationId)
+                .build();
+
+        return result;
     }
 }

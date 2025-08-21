@@ -2,12 +2,12 @@ package ddg.walking_rabbit.message.dto;
 
 import ddg.walking_rabbit.global.domain.entity.ContentType;
 import ddg.walking_rabbit.global.domain.entity.Role;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class ChatResponseDto {
     private Long messageId;
