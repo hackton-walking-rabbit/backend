@@ -67,5 +67,6 @@ tmp/
 temp/
 *.tmp
 hs_err_pid*.log
+
 /src/main/resources/application.properties
 walking-rabbit-storage-key.json

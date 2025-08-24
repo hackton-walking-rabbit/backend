@@ -28,4 +28,5 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return ErrorResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류가 발생했습니다.");
     }
+
 }

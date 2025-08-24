@@ -26,4 +26,5 @@ public class ConversationEntity {
     @Column(nullable = false)
     private Double longitude;
 
+    private String title;
 }
