@@ -2,19 +2,27 @@ package ddg.walking_rabbit.message.service;
 
 import com.google.cloud.storage.*;
 import ddg.walking_rabbit.global.domain.entity.*;
+import ddg.walking_rabbit.message.config.WebClientConfig;
 import ddg.walking_rabbit.message.dto.ChatResponseDto;
 import ddg.walking_rabbit.message.dto.ChatStartDto;
 import ddg.walking_rabbit.global.domain.repository.ConversationRepository;
 import ddg.walking_rabbit.global.domain.repository.MessageRepository;
 import ddg.walking_rabbit.global.domain.repository.MissionRepository;
 import ddg.walking_rabbit.global.domain.entity.UserEntity;
+import ddg.walking_rabbit.message.dto.ModelRequestDto;
+import ddg.walking_rabbit.message.dto.ModelResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -32,6 +40,7 @@ public class MessageService {
     private final MissionRepository missionRepository;
     private final ConversationRepository conversationRepository;
     private final Storage storage;
+    private final WebClient webClient;
 
     @Value("${gcp.storage.bucket.name}")
     private String bucketName;
@@ -49,21 +58,41 @@ public class MessageService {
 
         MessageEntity userMessage = uploadImage(file, conversation);
 
-        // 챗봇 연결
-        String photo = userMessage.getContent();
+        // 모델 요청 바디
+        ModelRequestDto requestDto = new ModelRequestDto();
+        requestDto.setPhoto(userMessage.getContent());
+        requestDto.setMission(mission != null ? mission.getContent() : null);
 
-        RestTemplate restTemplate = new RestTemplate();
+        ModelResponseDto responseDto = webClient.post()
+                .uri("/api/photo")
+                .bodyValue(requestDto)
+                .retrieve()
+                .onStatus(
+                       s -> s.value() == 400,
+                        response -> response.bodyToMono(String.class)
+                                .defaultIfEmpty("미션 실패")
+                                .flatMap(msg -> Mono.error(new IllegalArgumentException("미션 실패" + msg)))
+                )
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        resp -> resp.createException().flatMap(Mono::error)
+                )
+                .bodyToMono(ModelResponseDto.class)
+                .block();
 
-
-
-        String answer ="abc";
-
+        if (responseDto == null) {
+            throw new IllegalArgumentException("응답이 옳지 않습니다");
+        }
         MessageEntity aiMessage = new MessageEntity();
+        aiMessage.setContent(responseDto.getAnswer());
+        aiMessage.setConversation(conversation);
         aiMessage.setRole(Role.ASSISTANT);
         aiMessage.setContentType(ContentType.TEXT);
-        aiMessage.setContent(answer);
-        aiMessage.setConversation(conversation);
         messageRepository.save(aiMessage);
+
+        String title = responseDto.getTitle();
+        conversation.setTitle(title);
+        conversationRepository.save(conversation);
 
         ChatResponseDto result = new ChatResponseDto();
         result.setMessageId(aiMessage.getMessageId());
@@ -122,10 +151,17 @@ public class MessageService {
         // 챗봇 통신
         List<String> messages = messageRepository.findAllContentByConversationOrderByMessageIdAsc(conversation);
 
+        String answer = webClient.post()
+                .uri("/api/message")
+                .bodyValue(messages)
+                .retrieve()
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        resp -> resp.createException().flatMap(Mono::error)
+                )
+                .bodyToMono(String.class)
+                .block();
 
-
-        // 받기
-        String answer="abc";
         MessageEntity aiMessage = new MessageEntity();
         aiMessage.setRole(Role.ASSISTANT);
         aiMessage.setContentType(ContentType.TEXT);

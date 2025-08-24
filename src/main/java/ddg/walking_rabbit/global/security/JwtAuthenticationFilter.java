@@ -1,7 +1,7 @@
 package ddg.walking_rabbit.global.security;
 
-import ddg.walking_rabbit.user.entity.UserEntity;
-import ddg.walking_rabbit.user.repository.UserRepository;
+import ddg.walking_rabbit.global.domain.entity.UserEntity;
+import ddg.walking_rabbit.global.domain.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
