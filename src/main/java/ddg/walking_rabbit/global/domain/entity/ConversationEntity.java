@@ -27,5 +27,4 @@ public class ConversationEntity {
     private Double longitude;
 
     private String title;
-
 }
