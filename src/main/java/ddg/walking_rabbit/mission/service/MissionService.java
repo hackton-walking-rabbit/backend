@@ -1,6 +1,7 @@
 package ddg.walking_rabbit.mission.service;
 
 import ddg.walking_rabbit.global.domain.entity.MissionEntity;
+import ddg.walking_rabbit.global.domain.entity.MissionStatus;
 import ddg.walking_rabbit.global.domain.entity.MissionType;
 import ddg.walking_rabbit.global.domain.entity.UserEntity;
 import ddg.walking_rabbit.global.domain.repository.MissionRepository;
@@ -24,16 +25,16 @@ public class MissionService {
     private final UserRepository userRepository;
     private final WebClient webClient;
 
-    public MissionResponseDto createMission(Long userId) {
+    public MissionDto createMission(Long userId) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다."));
 
-        double random = Math.random();
-        boolean isNormal = random < 0.8;
+        boolean isNormal = Math.random() < 0.8;
+
+
 
         String content = webClient.post()
                 .uri("/api/mission")
-                .bodyValue(isNormal ? MissionType.GENERAL : MissionType.LOCAL)
                 .retrieve()
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
@@ -42,13 +43,22 @@ public class MissionService {
                 .bodyToMono(String.class)
                 .block();
 
+        // 랜덤한 공원 랜덤 돌리기
+        // 전체 공원 디비에 저장 -> 랜덤돌려서 ~에서 만들기
+        if (!isNormal) {
+            String park = ""+ "에서 ";
+            content = park + content;
+        }
+
         MissionEntity mission = new MissionEntity();
         mission.setUser(user);
         mission.setContent(content);
         mission.setMissionDate(LocalDate.now());
+        mission.setMissionType(isNormal ? MissionType.GENERAL : MissionType.LOCAL);
+        mission.setIsSuccess(MissionStatus.NONE);
         missionRepository.save(mission);
 
-        MissionResponseDto result = new MissionResponseDto();
+        MissionDto result = new MissionDto();
         result.setMissionId(mission.getMissionId());
         result.setContent(mission.getContent());
         return result;
@@ -65,6 +75,7 @@ public class MissionService {
         MissionResponseDto result = new MissionResponseDto();
         result.setMissionId(mission.getMissionId());
         result.setContent(mission.getContent());
+        result.setIsSuccess(mission.getIsSuccess().toString());
         return result;
     }
 }

@@ -19,10 +19,10 @@ public class MissionController {
     private final MissionService missionService;
 
     @PostMapping("/create")
-    public ResponseEntity<SuccessResponse<MissionResponseDto>> createMission(){
+    public ResponseEntity<SuccessResponse<MissionDto>> createMission(){
         UserEntity user = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = user.getUserId();
-        MissionResponseDto responseDto = missionService.createMission(userId);
+        MissionDto responseDto = missionService.createMission(userId);
         return SuccessResponse.onSuccess("오늘의 미션을 성공적으로 생성했습니다.", HttpStatus.CREATED, responseDto);
     }
 

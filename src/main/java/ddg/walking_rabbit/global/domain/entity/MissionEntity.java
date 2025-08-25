@@ -25,4 +25,7 @@ public class MissionEntity {
 
     private LocalDate missionDate;
 
+    private MissionType missionType;
+
+    private MissionStatus isSuccess;
 }
