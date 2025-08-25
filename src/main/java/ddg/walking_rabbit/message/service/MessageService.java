@@ -76,10 +76,21 @@ public class MessageService {
             throw new IllegalArgumentException("응답이 옳지 않습니다");
         }
 
-        // 미션인경우
-//        if (responseDto.getIsSuccess() != null && ) {
-//
-//        }
+         // 미션인경우
+        if (responseDto.getIsSuccess() != null) {
+            if (!responseDto.getIsSuccess()) {
+                throw new IllegalArgumentException("미션을 실패하셨습니다.");
+            }
+            if (conversation.getMission().getMissionType() == MissionType.LOCAL) {
+                String[] parts = conversation.getMission().getContent().split("에서");
+                // 공원 및 거리 저장된 엔티티 SpotEntityRepository라고 합세
+                // 근데 그 안의 범위가 아니면 머시기저시기 postGresSQL 폴리곤 써야할듯 난중에 하자
+                boolean success = false;
+                if (!success) {
+                    throw new IllegalArgumentException("미션을 실패하셨습니다");
+                }
+            }
+        }
 
         MessageEntity aiMessage = new MessageEntity();
         aiMessage.setContent(responseDto.getAnswer());

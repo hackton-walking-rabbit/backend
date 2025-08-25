@@ -8,4 +8,5 @@ import lombok.Setter;
 public class MissionResponseDto {
     private Long missionId;
     private String content;
+    private String isSuccess;
 }
