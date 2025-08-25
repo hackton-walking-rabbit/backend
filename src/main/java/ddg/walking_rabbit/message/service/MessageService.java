@@ -11,6 +11,7 @@ import ddg.walking_rabbit.global.domain.repository.MissionRepository;
 import ddg.walking_rabbit.global.domain.entity.UserEntity;
 import ddg.walking_rabbit.message.dto.ModelRequestDto;
 import ddg.walking_rabbit.message.dto.ModelResponseDto;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -138,7 +139,8 @@ public class MessageService {
 
     @Transactional
     public ChatResponseDto doChat(UserEntity user, Long conversationId, String content) {
-        ConversationEntity conversation = conversationRepository.findByConversationId(conversationId);
+        ConversationEntity conversation = conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new EntityNotFoundException("conversation이 존재하지 않습니다."));
 
         // 유저 대화 저장
         MessageEntity userMessage = new MessageEntity();
@@ -170,6 +172,7 @@ public class MessageService {
         messageRepository.save(aiMessage);
 
         ChatResponseDto result = ChatResponseDto.builder()
+                .messageId(aiMessage.getMessageId())
                 .role(Role.ASSISTANT)
                 .contentType(ContentType.TEXT)
                 .content(aiMessage.getContent())
