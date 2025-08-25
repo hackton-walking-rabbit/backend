@@ -54,7 +54,7 @@ public class MissionService {
         return result;
     }
 
-    public MissionDto findMission(Long userId){
+    public MissionResponseDto findMission(Long userId){
         LocalDate date = LocalDate.now();
         MissionEntity mission = missionRepository.findByUser_UserIdAndMissionDate(userId, date);
 
@@ -62,7 +62,8 @@ public class MissionService {
             throw new IllegalArgumentException("오늘의 미션을 생성해주세요!");
         }
 
-        MissionDto result = new MissionDto();
+        MissionResponseDto result = new MissionResponseDto();
+        result.setMissionId(mission.getMissionId());
         result.setContent(mission.getContent());
         return result;
     }

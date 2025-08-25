@@ -27,10 +27,10 @@ public class MissionController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<SuccessResponse<MissionDto>> getMission(){
+    public ResponseEntity<SuccessResponse<MissionResponseDto>> getMission(){
         UserEntity user = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = user.getUserId();
-        MissionDto responseDto = missionService.findMission(userId);
+        MissionResponseDto responseDto = missionService.findMission(userId);
         return SuccessResponse.onSuccess("오늘의 미션을 성공적으로 조회했습니다.", HttpStatus.OK, responseDto);
     }
 }
