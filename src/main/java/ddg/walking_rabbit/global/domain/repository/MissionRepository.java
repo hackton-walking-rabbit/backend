@@ -10,5 +10,5 @@ import java.time.LocalDate;
 public interface MissionRepository extends JpaRepository<MissionEntity, Long> {
     MissionEntity findByMissionId(Long missionId);
 
-    MissionEntity findByUser_UserIdAndMissionDate(Long userId, LocalDate date);
+    MissionEntity findTopByUser_UserIdAndMissionDateOrderByMissionIdDesc(Long userId, LocalDate date);
 }
