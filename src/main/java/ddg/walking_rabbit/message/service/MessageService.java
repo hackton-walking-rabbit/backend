@@ -3,14 +3,11 @@ package ddg.walking_rabbit.message.service;
 import com.google.cloud.storage.*;
 import ddg.walking_rabbit.global.domain.entity.*;
 import ddg.walking_rabbit.message.config.WebClientConfig;
-import ddg.walking_rabbit.message.dto.ChatResponseDto;
-import ddg.walking_rabbit.message.dto.ChatStartDto;
+import ddg.walking_rabbit.message.dto.*;
 import ddg.walking_rabbit.global.domain.repository.ConversationRepository;
 import ddg.walking_rabbit.global.domain.repository.MessageRepository;
 import ddg.walking_rabbit.global.domain.repository.MissionRepository;
 import ddg.walking_rabbit.global.domain.entity.UserEntity;
-import ddg.walking_rabbit.message.dto.ModelRequestDto;
-import ddg.walking_rabbit.message.dto.ModelResponseDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,12 +66,6 @@ public class MessageService {
                 .bodyValue(requestDto)
                 .retrieve()
                 .onStatus(
-                       s -> s.value() == 400,
-                        response -> response.bodyToMono(String.class)
-                                .defaultIfEmpty("미션 실패")
-                                .flatMap(msg -> Mono.error(new IllegalArgumentException("미션 실패" + msg)))
-                )
-                .onStatus(
                         HttpStatusCode::is5xxServerError,
                         resp -> resp.createException().flatMap(Mono::error)
                 )
@@ -84,6 +75,12 @@ public class MessageService {
         if (responseDto == null) {
             throw new IllegalArgumentException("응답이 옳지 않습니다");
         }
+
+        // 미션인경우
+//        if (responseDto.getIsSuccess() != null && ) {
+//
+//        }
+
         MessageEntity aiMessage = new MessageEntity();
         aiMessage.setContent(responseDto.getAnswer());
         aiMessage.setConversation(conversation);
@@ -101,6 +98,7 @@ public class MessageService {
         result.setRole(Role.ASSISTANT);
         result.setContentType(ContentType.TEXT);
         result.setContent(aiMessage.getContent());
+        result.setKeyword(responseDto.getKeyword());
         return result;
     }
 
@@ -153,7 +151,7 @@ public class MessageService {
         // 챗봇 통신
         List<String> messages = messageRepository.findAllContentByConversationOrderByMessageIdAsc(conversation);
 
-        String answer = webClient.post()
+        ModelShortResponseDto responseDto = webClient.post()
                 .uri("/api/message")
                 .bodyValue(messages)
                 .retrieve()
@@ -161,13 +159,17 @@ public class MessageService {
                         HttpStatusCode::is5xxServerError,
                         resp -> resp.createException().flatMap(Mono::error)
                 )
-                .bodyToMono(String.class)
+                .bodyToMono(ModelShortResponseDto.class)
                 .block();
+
+        if (responseDto == null) {
+            throw new IllegalArgumentException("응답이 옳지 않습니다");
+        }
 
         MessageEntity aiMessage = new MessageEntity();
         aiMessage.setRole(Role.ASSISTANT);
         aiMessage.setContentType(ContentType.TEXT);
-        aiMessage.setContent(answer);
+        aiMessage.setContent(responseDto.getAnswer());
         aiMessage.setConversation(conversation);
         messageRepository.save(aiMessage);
 
@@ -177,6 +179,7 @@ public class MessageService {
                 .contentType(ContentType.TEXT)
                 .content(aiMessage.getContent())
                 .conversationId(conversationId)
+                .keyword(responseDto.getKeyword())
                 .build();
 
         return result;
