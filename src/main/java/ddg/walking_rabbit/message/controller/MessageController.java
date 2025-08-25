@@ -37,7 +37,7 @@ public class MessageController {
     }
 
     @PostMapping("/text")
-    public ResponseEntity<SuccessResponse<ChatResponseDto>> doChat(ChatRequestDto requestDto) {
+    public ResponseEntity<SuccessResponse<ChatResponseDto>> doChat(@RequestBody ChatRequestDto requestDto) {
         UserEntity user = ((UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         ChatResponseDto responseDto = messageService.doChat(user, requestDto.getConversationId(), requestDto.getContent());
         return SuccessResponse.onSuccess("챗봇 응답이 생성되었습니다.", HttpStatus.CREATED, responseDto);
